@@ -39,33 +39,32 @@ do
 
 		EXPECTEDCODE=$(cat $FILENAME/expected_code.txt )
 
-		#make a temp file for error logging
-		touch $FILENAME/cout.txt
-		>$FILENAME/cout.txt
+		truncate -s 0 $FILENAME/result.txt
 
-		$EXE $FILENAME/input.txt $FILENAME/input2.txt $FILENAME/result.txt 2> cout.txt
+		$EXE $FILENAME/input.txt $FILENAME/input2.txt &> $FILENAME/result.txt
 
 		# result code handling...
 		RESULTCODE=$?														#put result code into a variable.
 		>$FILENAME/result_code.txt 											#clear result
 		echo $RESULTCODE >> $FILENAME/result_code.txt 						#echo result code into file.
+		RESULT=$(cat $FILENAME/result.txt)
 
-		LOGRESULT=$(cat $FILENAME/cout.txt)
-
-		if [ "$EXPECTEDCODE" != "$RESULTCODE" ];
+		if [ "$EXPECTEDCODE" != "$RESULTCODE" ]
 		then
 			echo ''
 			echo -e "${RED}Error: The return code of $FILENAME is not the what is expected.${NONE}" 1>&2
 			echo -e "${RED}executed - $FILENAME - with return code [$RESULTCODE]${NONE}"
 
-			if [ "$LOGRESULT" != "" ]; then
-				echo -e "${RED}$LOGRESULT${NONE}"
-		fi
+			if [ "$LOGRESULT" != "" ]
+			then
+				echo -e "${RED}$RESULT${NONE}"
+			fi
 		else
 			if [ -f "$FILENAME/expected.txt" ];
 			then
 				./check $FILENAME/expected.txt $FILENAME/result.txt
-				if [ "$?" != "0" ]; then
+				if [ "$?" != "0" ]
+				then
 					echo ""
 					echo -e "${RED}Error: The results of $FILENAME are different from what is expected${NONE}" 1>&2
 					#exit 255
@@ -81,8 +80,6 @@ do
 		if [ "$(cat $FILENAME/log.txt)" = "" ]; then
 			rm $FILENAME/log.txt
 		fi
-
-		rm -f tempDelete.log.txt
 	fi
 done
 

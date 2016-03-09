@@ -1,0 +1,1 @@
+Error: The file 'testcase_emptyline_invalid/input.txt' contains an empty line on line number [1].

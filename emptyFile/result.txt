@@ -1,0 +1,1 @@
+Error: The file [emptyFile/input.txt] is empty

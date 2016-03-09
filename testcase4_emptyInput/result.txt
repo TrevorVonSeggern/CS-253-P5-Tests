@@ -1,0 +1,1 @@
+Error: The file [testcase4_emptyInput/input.txt] is empty
