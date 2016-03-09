@@ -16,9 +16,9 @@ RED='\e[0;31m';
 GREEN='\e[0;32m';
 
 #Building the source
-cd ../src
+cd ..
 make buildTest
-cd ../test
+cd test
 make
 
 #Testing the files
@@ -40,17 +40,17 @@ do
 		EXPECTEDCODE=$(cat $FILENAME/expected_code.txt )
 
 		#make a temp file for error logging
-		touch tempDelete.log.txt
-		>tempDelete.log.txt
+		touch $FILENAME/cout.txt
+		>$FILENAME/cout.txt
 
-		$EXE $FILENAME/input.txt $FILENAME/input2.txt $FILENAME/result.txt 2>tempDelete.log.txt
+		$EXE $FILENAME/input.txt $FILENAME/input2.txt $FILENAME/result.txt 2> cout.txt
 
 		# result code handling...
 		RESULTCODE=$?														#put result code into a variable.
 		>$FILENAME/result_code.txt 											#clear result
 		echo $RESULTCODE >> $FILENAME/result_code.txt 						#echo result code into file.
 
-		LOGRESULT=$(cat tempDelete.log.txt)
+		LOGRESULT=$(cat $FILENAME/cout.txt)
 
 		if [ "$EXPECTEDCODE" != "$RESULTCODE" ];
 		then
@@ -61,9 +61,9 @@ do
 			if [ "$LOGRESULT" != "" ]; then
 				echo -e "${RED}$LOGRESULT${NONE}"
 		fi
-			#exit 255
 		else
-			if [ -f $FILENAME/expected.txt ]; then
+			if [ -f "$FILENAME/expected.txt" ];
+			then
 				./check $FILENAME/expected.txt $FILENAME/result.txt
 				if [ "$?" != "0" ]; then
 					echo ""
